@@ -70,6 +70,8 @@ static const CGFloat kAnimate = 0.3;
     if (self = [super initWithFrame:frame]) {
         self.allowTapped = YES;
         self.animate = YES;
+        // modify by tianya
+        self.allowValue = 0;
         [self addSubViews];
     }
     return self;
@@ -79,6 +81,8 @@ static const CGFloat kAnimate = 0.3;
     [super awakeFromNib];
     self.allowTapped = YES;
     self.animate = YES;
+    // modify by tianya
+    self.allowValue = 0;
     [self addSubViews];
 }
 
@@ -237,6 +241,11 @@ static const CGFloat kAnimate = 0.3;
 }
 
 - (void)sliderBtnTouchBegin:(UIButton *)btn {
+    // modify by tianya
+    if (self.allowValue != 0 && self.value > self.allowValue) {
+        return;
+    }
+    
     if ([self.delegate respondsToSelector:@selector(sliderTouchBegan:)]) {
         [self.delegate sliderTouchBegan:self.value];
     }
@@ -248,6 +257,11 @@ static const CGFloat kAnimate = 0.3;
 }
 
 - (void)sliderBtnTouchEnded:(UIButton *)btn {
+    // modify by tianya
+    if (self.allowValue != 0 && self.value > self.allowValue) {
+        return;
+    }
+    
     if ([self.delegate respondsToSelector:@selector(sliderTouchEnded:)]) {
         [self.delegate sliderTouchEnded:self.value];
     }
@@ -266,6 +280,12 @@ static const CGFloat kAnimate = 0.3;
     // value的值需在0-1之间
     value = value >= 1.0 ? 1.0 : value <= 0.0 ? 0.0 : value;
     if (self.value == value) return;
+    
+    // modify by tianya
+    if (self.allowValue != 0 && value > self.allowValue) {
+        return;
+    }
+    
     self.isForward = self.value < value;
     [self setValue:value];
     if ([self.delegate respondsToSelector:@selector(sliderValueChanged:)]) {
@@ -278,6 +298,12 @@ static const CGFloat kAnimate = 0.3;
     // 获取进度
     float value = (point.x - self.bgProgressView.left) * 1.0 / self.bgProgressView.width;
     value = value >= 1.0 ? 1.0 : value <= 0 ? 0 : value;
+    
+    // modify by tianya
+    if (self.allowValue != 0 && value > self.allowValue) {
+        return;
+    }
+    
     [self setValue:value];
     if ([self.delegate respondsToSelector:@selector(sliderTapped:)]) {
         [self.delegate sliderTapped:value];

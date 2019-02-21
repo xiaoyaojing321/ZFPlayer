@@ -49,6 +49,10 @@
 
 @property (nonatomic, assign) BOOL isShow;
 
+/// 全屏按钮
+// modify by tianya
+@property (nonatomic, strong) UIButton *qualityButton;
+
 @end
 
 @implementation ZFLandScapeControlView
@@ -68,6 +72,7 @@
         
         [self.bottomToolView addSubview:self.slider];
         [self.bottomToolView addSubview:self.totalTimeLabel];
+        [self.bottomToolView addSubview:self.qualityButton];
         [self addSubview:self.lockBtn];
         
         // 设置子控件的响应事件
@@ -133,7 +138,8 @@
     min_w = 62;
     min_x = self.bottomToolView.width - min_w - ((iPhoneX && self.player.orientationObserver.fullScreenMode == ZFFullScreenModeLandscape) ? 44: min_margin);
     min_y = 0;
-    min_h = 30;
+    // modiyf by tianya
+    min_x = min_x - 60;
     self.totalTimeLabel.frame = CGRectMake(min_x, min_y, min_w, min_h);
     self.totalTimeLabel.centerY = self.playOrPauseBtn.centerY;
     
@@ -143,6 +149,15 @@
     min_h = 30;
     self.slider.frame = CGRectMake(min_x, min_y, min_w, min_h);
     self.slider.centerY = self.playOrPauseBtn.centerY;
+    
+    // modiyf by tianya
+    min_w = 60;
+    min_h = min_w;
+    min_x = self.bottomToolView.width - min_w - min_margin;
+    min_y = 0;
+    self.qualityButton.frame = CGRectMake(min_x, min_y, min_w, min_h);
+    self.qualityButton.centerY = self.currentTimeLabel.centerY;
+    
     
     min_x = (iPhoneX && self.player.orientationObserver.fullScreenMode == ZFFullScreenModeLandscape) ? 50: 18;
     min_y = 0;
@@ -156,6 +171,7 @@
     [self.backBtn addTarget:self action:@selector(backBtnClickAction:) forControlEvents:UIControlEventTouchUpInside];
     [self.playOrPauseBtn addTarget:self action:@selector(playPauseButtonClickAction:) forControlEvents:UIControlEventTouchUpInside];
     [self.lockBtn addTarget:self action:@selector(lockButtonClickAction:) forControlEvents:UIControlEventTouchUpInside];
+    [self.qualityButton addTarget:self action:@selector(qualityButtonClickAction:) forControlEvents:UIControlEventTouchUpInside];
 }
 
 - (void)layOutControllerViews {
@@ -309,6 +325,10 @@
     }];
 }
 
+- (void)showQuality:(NSString *_Nullable)quality {
+    [self.qualityButton setTitle:quality forState:UIControlStateNormal];
+}
+
 #pragma mark - action
 
 - (void)backBtnClickAction:(UIButton *)sender {
@@ -340,6 +360,12 @@
 - (void)lockButtonClickAction:(UIButton *)sender {
     sender.selected = !sender.selected;
     self.player.lockedScreen = sender.selected;
+}
+
+// modify by tianya
+- (void)qualityButtonClickAction:(UIButton *)sender {
+
+    [[NSNotificationCenter defaultCenter] postNotificationName:@"showQualityMenu" object:nil userInfo:nil];
 }
 
 #pragma mark - getter
@@ -428,6 +454,15 @@
         [_lockBtn setImage:ZFPlayer_Image(@"ZFPlayer_lock-nor") forState:UIControlStateSelected];
     }
     return _lockBtn;
+}
+
+// modify by tianya
+- (UIButton *)qualityButton {
+    if (!_qualityButton) {
+        _qualityButton = [UIButton buttonWithType:UIButtonTypeCustom];
+        //[_qualityButton setTitle:@"高清" forState:UIControlStateNormal];
+    }
+    return _qualityButton;
 }
 
 @end

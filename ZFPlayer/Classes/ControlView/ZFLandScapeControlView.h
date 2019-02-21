@@ -79,6 +79,9 @@ NS_ASSUME_NONNULL_BEGIN
 /// 滑杆结束滑动
 - (void)sliderChangeEnded;
 
+// modify by tianya
+- (void)showQuality:(NSString *_Nullable)quality;
+
 @end
 
 NS_ASSUME_NONNULL_END

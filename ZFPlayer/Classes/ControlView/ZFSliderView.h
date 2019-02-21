@@ -79,6 +79,10 @@
 
 //@property (nonatomic, assign) CGFloat ignoreMargin;
 
+//modify by tianya
+/// 控制受限的视频的进度
+@property (nonatomic, assign) float allowValue;
+
 // 设置滑块背景色
 - (void)setBackgroundImage:(UIImage *)image forState:(UIControlState)state;
 // 设置滑块图片
