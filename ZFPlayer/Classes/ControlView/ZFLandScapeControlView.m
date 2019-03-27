@@ -72,7 +72,7 @@
         
         [self.bottomToolView addSubview:self.slider];
         [self.bottomToolView addSubview:self.totalTimeLabel];
-        [self.bottomToolView addSubview:self.qualityButton];
+        //[self.bottomToolView addSubview:self.qualityButton];
         [self addSubview:self.lockBtn];
         
         // 设置子控件的响应事件
@@ -139,7 +139,7 @@
     min_x = self.bottomToolView.width - min_w - ((iPhoneX && self.player.orientationObserver.fullScreenMode == ZFFullScreenModeLandscape) ? 44: min_margin);
     min_y = 0;
     // modiyf by tianya
-    min_x = min_x - 60;
+    //min_x = min_x - 60;
     self.totalTimeLabel.frame = CGRectMake(min_x, min_y, min_w, min_h);
     self.totalTimeLabel.centerY = self.playOrPauseBtn.centerY;
     

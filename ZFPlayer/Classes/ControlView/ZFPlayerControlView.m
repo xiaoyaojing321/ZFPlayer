@@ -33,6 +33,7 @@
 #import "ZFVolumeBrightnessView.h"
 #import "ZFSmallFloatControlView.h"
 #import "ZFPlayer.h"
+#import "ZFVideoGuideView.h"
 
 static const CGFloat ZFPlayerAnimationTimeInterval              = 2.5f;
 static const CGFloat ZFPlayerControlViewAutoFadeOutTimeInterval = 0.25f;
@@ -72,6 +73,8 @@ static const CGFloat ZFPlayerControlViewAutoFadeOutTimeInterval = 0.25f;
 @property (nonatomic, strong) ZFSmallFloatControlView *floatControlView;
 
 @property (nonatomic, strong) ZFVolumeBrightnessView *volumeBrightnessView;
+
+@property (nonatomic, strong) ZFVideoGuideView *guideButton;
 
 @end
 
@@ -155,6 +158,9 @@ static const CGFloat ZFPlayerControlViewAutoFadeOutTimeInterval = 0.25f;
     self.volumeBrightnessView.frame = CGRectMake(min_x, min_y, min_w, min_h);
     self.volumeBrightnessView.center = self.center;
     
+    self.guideButton.centerX = self.centerX;
+    self.guideButton.centerY = self.centerY;
+    self.guideButton.frame = self.frame;
 }
 
 - (void)dealloc {
@@ -177,6 +183,8 @@ static const CGFloat ZFPlayerControlViewAutoFadeOutTimeInterval = 0.25f;
     [self.fastView addSubview:self.fastProgressView];
     [self addSubview:self.bottomPgrogress];
     [self addSubview:self.volumeBrightnessView];
+    
+    [self addSubview:self.guideButton];
 }
 
 - (void)autoFadeOutControlView {
@@ -688,6 +696,14 @@ static const CGFloat ZFPlayerControlViewAutoFadeOutTimeInterval = 0.25f;
 - (void)setBackBtnClickCallback:(void (^)(void))backBtnClickCallback {
     _backBtnClickCallback = [backBtnClickCallback copy];
     self.landScapeControlView.backBtnClickCallback = _backBtnClickCallback;
+}
+
+
+- (ZFVideoGuideView *)guideButton {
+    if (!_guideButton) {
+        _guideButton = [[ZFVideoGuideView alloc] init];
+    }
+    return _guideButton;
 }
 
 @end
