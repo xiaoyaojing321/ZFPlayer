@@ -55,6 +55,9 @@ static const CGFloat ZFPlayerControlViewAutoFadeOutTimeInterval = 0.25f;
 @property (nonatomic, strong) UIImageView *fastImageView;
 /// 加载失败按钮
 @property (nonatomic, strong) UIButton *failBtn;
+/// 重新播放按钮
+@property (nonatomic, strong) UIButton *refreshPlayBtn;
+
 /// 底部播放进度
 @property (nonatomic, strong) ZFSliderView *bottomPgrogress;
 /// 封面图
@@ -122,6 +125,11 @@ static const CGFloat ZFPlayerControlViewAutoFadeOutTimeInterval = 0.25f;
     self.failBtn.frame = CGRectMake(min_x, min_y, min_w, min_h);
     self.failBtn.center = self.center;
     
+    self.refreshPlayBtn.frame = CGRectMake(min_x, min_y, min_w, min_h);
+    self.refreshPlayBtn.center = self.center;
+    
+    
+    
     min_w = 140;
     min_h = 80;
     self.fastView.frame = CGRectMake(min_x, min_y, min_w, min_h);
@@ -176,6 +184,8 @@ static const CGFloat ZFPlayerControlViewAutoFadeOutTimeInterval = 0.25f;
     
     [self addSubview:self.activity];
     [self addSubview:self.failBtn];
+    [self addSubview:self.refreshPlayBtn];
+    
     
     [self addSubview:self.fastView];
     [self.fastView addSubview:self.fastImageView];
@@ -260,6 +270,8 @@ static const CGFloat ZFPlayerControlViewAutoFadeOutTimeInterval = 0.25f;
     self.bottomPgrogress.bufferValue = 0;
     self.floatControlView.hidden = YES;
     self.failBtn.hidden = YES;
+    self.refreshPlayBtn.hidden = YES;
+    
     self.portraitControlView.hidden = self.player.isFullScreen;
     self.landScapeControlView.hidden = !self.player.isFullScreen;
     if (self.controlViewAppeared) {
@@ -267,6 +279,10 @@ static const CGFloat ZFPlayerControlViewAutoFadeOutTimeInterval = 0.25f;
     } else {
         [self hideControlViewWithAnimated:NO];
     }
+}
+
+- (void)showRefreshPlayView {
+    self.refreshPlayBtn.hidden = NO;
 }
 
 /// 设置标题、封面、全屏模式
@@ -398,12 +414,17 @@ static const CGFloat ZFPlayerControlViewAutoFadeOutTimeInterval = 0.25f;
         [self.portraitControlView playBtnSelectedState:YES];
         [self.landScapeControlView playBtnSelectedState:YES];
         self.failBtn.hidden = YES;
+        self.refreshPlayBtn.hidden = YES;
+        
     } else if (state == ZFPlayerPlayStatePaused) {
         [self.portraitControlView playBtnSelectedState:NO];
         [self.landScapeControlView playBtnSelectedState:NO];
         self.failBtn.hidden = YES;
+        self.refreshPlayBtn.hidden = YES;
+        
     } else if (state == ZFPlayerPlayStatePlayFailed) {
         self.failBtn.hidden = NO;
+        self.refreshPlayBtn.hidden = NO;
         [self.activity stopAnimating];
     }
 }
@@ -538,6 +559,13 @@ static const CGFloat ZFPlayerControlViewAutoFadeOutTimeInterval = 0.25f;
     [self.player.currentPlayerManager reloadPlayer];
 }
 
+/// 重新播放
+- (void)refreshPlayBtnClick:(UIButton *)sender {
+    [self.player.currentPlayerManager replay];
+}
+
+
+
 #pragma mark - setter
 
 - (void)setPlayer:(ZFPlayerController *)player {
@@ -643,6 +671,22 @@ static const CGFloat ZFPlayerControlViewAutoFadeOutTimeInterval = 0.25f;
     }
     return _failBtn;
 }
+
+- (UIButton *)refreshPlayBtn {
+    if (!_refreshPlayBtn) {
+        _refreshPlayBtn = [UIButton buttonWithType:UIButtonTypeSystem];
+        [_refreshPlayBtn setTitle:@"播放完成,點擊重新播放" forState:UIControlStateNormal];
+        [_refreshPlayBtn addTarget:self action:@selector(refreshPlayBtnClick:) forControlEvents:UIControlEventTouchUpInside];
+        [_refreshPlayBtn setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
+        _refreshPlayBtn.titleLabel.font = [UIFont systemFontOfSize:14.0];
+        _refreshPlayBtn.backgroundColor = [UIColor colorWithRed:0 green:0 blue:0 alpha:0.7];
+        _refreshPlayBtn.hidden = YES;
+    }
+    return _refreshPlayBtn;
+}
+
+
+
 
 - (ZFSliderView *)bottomPgrogress {
     if (!_bottomPgrogress) {

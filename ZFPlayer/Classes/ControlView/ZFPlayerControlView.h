@@ -67,4 +67,6 @@
 /// 重置控制层
 - (void)resetControlView;
 
+- (void)showRefreshPlayView;
+
 @end
